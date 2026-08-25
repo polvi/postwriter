@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Dev helper: drive the Nomad's screen over adb.
-#   scripts/drive.sh open        open the plugin view from an open note (plugins icon → notedrop)
+#   scripts/drive.sh open        open the plugin view from an open note (plugins icon → Post Writer)
 #   scripts/drive.sh send        tap the first "Send ›" row
 #   scripts/drive.sh inbox       switch to the Inbox tab
 #   scripts/drive.sh pull        tap the first inbox row
@@ -27,7 +27,7 @@ for n in re.findall(r"<node [^>]*?/?>", xml):
         if b:
             x1,y1,x2,y2=map(int,b.groups()); print((x1+x2)//2,(y1+y2)//2); break
 ')
-    [ -n "$pt" ] || { echo "notedrop menu entry not found" >&2; exit 1; }
+    [ -n "$pt" ] || { echo "Post Writer menu entry not found" >&2; exit 1; }
     d shell input tap $pt; sleep 4 ;;
   send) d shell input tap 1780 672; sleep "${2:-6}" ;;
   inbox) d shell input tap 1440 180; sleep 3 ;;

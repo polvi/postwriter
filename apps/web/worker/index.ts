@@ -45,7 +45,7 @@ api.post('/send', async (c) => {
   // Sending to yourself is allowed on purpose: it is how a one-device setup
   // tests the round trip, and it doubles as "move this note to INBOX".
   if (to !== me && !(await db.userExists(c.env, to))) {
-    return c.json({ error: 'unknown recipient', hint: 'they need to open the notedrop plugin once' }, 404);
+    return c.json({ error: 'unknown recipient', hint: 'they need to open the Post Writer plugin once' }, 404);
   }
   const body = JSON.stringify(note);
   const created = await db.insertMessage(
@@ -72,7 +72,7 @@ api.get('/inbox/:id', async (c) => {
   const body = await db.getBody(c.env, row.id);
   if (body === null) return c.json({ error: 'note body missing' }, 410);
   return new Response(body, {
-    headers: { 'content-type': 'application/json', 'x-notedrop-from': row.from_login, 'x-notedrop-title': encodeURIComponent(row.title) },
+    headers: { 'content-type': 'application/json', 'x-postwriter-from': row.from_login, 'x-postwriter-title': encodeURIComponent(row.title) },
   });
 });
 

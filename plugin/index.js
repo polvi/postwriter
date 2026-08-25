@@ -1,5 +1,5 @@
 /**
- * notedrop plugin entry. PluginHost runs this once per plugin runtime; a
+ * Post Writer plugin entry. PluginHost runs this once per plugin runtime; a
  * side-button press in NOTE opens the plugin view (App.tsx).
  * @format
  */
@@ -12,7 +12,7 @@ import { BUILD_STAMP } from './src/buildStamp';
 import { registerSideButton } from './src/buttons';
 
 // Top-level so logcat proves which bundle is running.
-console.log('[notedrop] bundle ' + BUILD_STAMP.git + ' ' + BUILD_STAMP.builtAt);
+console.log('[postwriter] bundle ' + BUILD_STAMP.git + ' ' + BUILD_STAMP.builtAt);
 
 AppRegistry.registerComponent(appName, () => App);
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Build notedrop.snplg: RN bundle + committed PluginConfig.json + icon, zipped.
-# Output: build/outputs/notedrop.snplg (and build/generated/notedrop.bundle
+# Build postwriter.snplg: RN bundle + committed PluginConfig.json + icon, zipped.
+# Output: build/outputs/postwriter.snplg (and build/generated/postwriter.bundle
 # for hot reload). Never rewrites PluginConfig.json: the pluginID stays
 # stable so a reinstall is an in-place upgrade.
 set -euo pipefail

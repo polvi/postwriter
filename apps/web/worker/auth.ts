@@ -20,7 +20,7 @@ export async function whoami(request: Request, env: Env): Promise<{ login: strin
 export async function requireUser(c: Context<AppContext>, next: Next): Promise<Response | void> {
   const user = await whoami(c.req.raw, c.env);
   if (!user) {
-    return c.json({ error: 'unauthenticated', hint: 'notedrop is reachable only over the tailnet' }, 401);
+    return c.json({ error: 'unauthenticated', hint: 'Post Writer is reachable only over the tailnet' }, 401);
   }
   await c.env.DB.prepare(
     `INSERT INTO users (login, name) VALUES (?, ?)

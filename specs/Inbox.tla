@@ -1,5 +1,5 @@
 ---------------------------- MODULE Inbox ----------------------------
-(* notedrop delivery: a sent note is written to the recipient's device   *)
+(* Post Writer delivery: a sent note is written to the recipient's device   *)
 (* and acknowledged to the server exactly once, with the device write     *)
 (* strictly before the ack. The plugin may crash at any point during a    *)
 (* pull; the server's ack is a single conditional UPDATE                  *)

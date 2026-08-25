@@ -15,7 +15,7 @@ export async function registerSideButton(): Promise<void> {
   try {
     await PluginManager.unregisterButton(SIDE_BUTTON_ID);
   } catch (error) {
-    console.log(`[notedrop] no stale button to remove: ${(error as Error).message}`);
+    console.log(`[postwriter] no stale button to remove: ${(error as Error).message}`);
   }
   try {
     await PluginManager.registerButton(1, ['NOTE'], {
@@ -25,6 +25,6 @@ export async function registerSideButton(): Promise<void> {
       showType: 1,
     });
   } catch (error) {
-    console.log(`[notedrop] side button registration failed: ${(error as Error).message}`);
+    console.log(`[postwriter] side button registration failed: ${(error as Error).message}`);
   }
 }

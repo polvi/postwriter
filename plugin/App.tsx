@@ -1,5 +1,5 @@
 /**
- * notedrop plugin view. Two screens, Send and Inbox, drawn for e-ink: black
+ * Post Writer plugin view. Two screens, Send and Inbox, drawn for e-ink: black
  * on white, big targets, no animation, and every state change written out
  * as text because there is no other feedback channel on the device.
  */
@@ -32,7 +32,7 @@ export default function App(): React.ReactElement {
         (e: Error) => `error: ${e.message}`,
       );
       if (denied) {
-        setStatus(`Permission refused: ${denied}. Enable it under Settings › Apps › Plugins › notedrop.`);
+        setStatus(`Permission refused: ${denied}. Enable it under Settings › Apps › Plugins › Post Writer.`);
         return;
       }
       setStatus('');
@@ -141,7 +141,7 @@ function SendScreen({ me, busy, setBusy, setStatus }: ScreenProps & { me: UserIn
       const r = await api.send(newId(), to.login, note);
       setStatus(`Sent "${note.title}" to ${to.name} (${r.elements} elements).`);
     } catch (e) {
-      console.log(`[notedrop] send failed at "${stage}": ${(e as Error).stack ?? String(e)}`);
+      console.log(`[postwriter] send failed at "${stage}": ${(e as Error).stack ?? String(e)}`);
       setStatus(`${describe(e as Error)} (at: ${stage})`);
     } finally {
       setBusy(false);
@@ -153,7 +153,7 @@ function SendScreen({ me, busy, setBusy, setStatus }: ScreenProps & { me: UserIn
   return (
     <ScrollView style={s.body} contentContainerStyle={s.bodyContent}>
       <Text style={s.label}>This note</Text>
-      <Text style={s.value}>{notePath ? titleFor(notePath) : 'No note open. Open a note, then tap notedrop.'}</Text>
+      <Text style={s.value}>{notePath ? titleFor(notePath) : 'No note open. Open a note, then tap Post Writer.'}</Text>
       <View style={s.rowHead}>
         <Text style={s.label}>Send to</Text>
         <Pressable style={s.small} onPress={refresh} disabled={busy}>
@@ -218,11 +218,11 @@ function InboxScreen({ busy, setBusy, setStatus }: ScreenProps): React.ReactElem
       try {
         await device.openFile(path, 0);
       } catch (error) {
-        console.log(`[notedrop] openFile unavailable: ${(error as Error).message}`);
+        console.log(`[postwriter] openFile unavailable: ${(error as Error).message}`);
         setStatus(`Saved to ${shown}. Open it from Files › INBOX.`);
       }
     } catch (e) {
-      console.log(`[notedrop] pull failed: ${(e as Error).stack ?? String(e)}`);
+      console.log(`[postwriter] pull failed: ${(e as Error).stack ?? String(e)}`);
       setStatus(describe(e as Error));
     } finally {
       setBusy(false);

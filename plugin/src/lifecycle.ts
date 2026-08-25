@@ -26,7 +26,7 @@ function register(): void {
     PluginManager.registerPluginLifeListener({
       onMsg: (msg: unknown) => {
         const text = typeof msg === 'string' ? msg : JSON.stringify(msg);
-        console.log(`[notedrop] lifecycle ${text}`);
+        console.log(`[postwriter] lifecycle ${text}`);
         // The host sends {state: n} with n in the changelog's order:
         // 0 init, 1 mount, 2 start, 3 pause, 4 unmount, 5 destroy (observed:
         // 3 on closing the view, 2 on reopening it). Only mount/start mean
@@ -40,6 +40,6 @@ function register(): void {
       },
     });
   } catch (error) {
-    console.log(`[notedrop] no lifecycle API on this host: ${(error as Error).message}`);
+    console.log(`[postwriter] no lifecycle API on this host: ${(error as Error).message}`);
   }
 }

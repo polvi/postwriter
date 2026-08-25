@@ -43,11 +43,11 @@ export async function ensurePermissions(perms: string[]): Promise<string | null>
       // Firmware whose PluginHost predates the permission API (seen on
       // Chauvet 3.x, host 1.00.26005190) has no native hasPermission at all;
       // there is nothing to grant there, so carry on.
-      console.log(`[notedrop] no permission API on this host (${(error as Error).message}); continuing`);
+      console.log(`[postwriter] no permission API on this host (${(error as Error).message}); continuing`);
       return null;
     }
     if (has === 1) continue;
-    const r = await PluginManager.requestPermission(p, 'notedrop needs this to send and receive notes.');
+    const r = await PluginManager.requestPermission(p, 'Post Writer needs this to send and receive notes.');
     if (r !== 1 && r !== 2) return p;
   }
   return null;

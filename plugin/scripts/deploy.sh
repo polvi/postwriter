@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build + install notedrop.snplg on the Supernote over adb (Wi-Fi / tailnet).
+# Build + install postwriter.snplg on the Supernote over adb (Wi-Fi / tailnet).
 #
 #   plugin/scripts/deploy.sh [--no-build]
 #   SNPLG_DEVICE=host:5555 (default: the Nomad on the tailnet)
@@ -26,7 +26,7 @@ SNPLG=build/outputs/postwriter.snplg
 [ -f "$SNPLG" ] || { echo "no $SNPLG" >&2; exit 1; }
 NAME="$(basename "$SNPLG")"
 
-UIXML="${TMPDIR:-/tmp}/notedrop-ui-$$.xml"
+UIXML="${TMPDIR:-/tmp}/postwriter-ui-$$.xml"
 trap 'rm -f "$UIXML"; adb shell rm -f /sdcard/_ui.xml >/dev/null 2>&1 || true' EXIT
 
 ui_dump() {
