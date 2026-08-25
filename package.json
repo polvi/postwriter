@@ -1,0 +1,22 @@
+{
+  "name": "notedrop",
+  "private": true,
+  "license": "AGPL-3.0-or-later",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "bun run --cwd apps/web dev",
+    "test": "bun run --cwd apps/web test",
+    "typecheck": "bun run --cwd apps/web typecheck",
+    "deploy": "bun run --cwd apps/web deploy",
+    "migrate": "bun run --cwd apps/web migrate",
+    "plugin:build": "bash plugin/buildPlugin.sh",
+    "plugin:deploy": "bash plugin/scripts/deploy.sh",
+    "plugin:hotreload": "bash plugin/scripts/hotreload.sh",
+    "plugin:logs": "bash plugin/scripts/logs.sh"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.3.14"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "notedrop",
+  "pluginKey": "notedrop",
+  "pluginID": "notedrop00000001",
+  "iconPath": "/icon.png",
+  "desc": "Send this note to someone on the tailnet, and pull notes sent to you.",
+  "author": "polvi",
+  "versionCode": "1",
+  "versionName": "0.1.0",
+  "jsMainPath": "index",
+  "uses-permissions": [
+    "plugin.permission.FILE:READ",
+    "plugin.permission.FILE:WRITE",
+    "plugin.permission.INTERNET"
+  ]
+}
