@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <!-- Post Writer: a pony express rider at full gallop, letter held high. -->
+  <!-- Solid black silhouette on transparent, drawn for a 96px e-ink glyph. -->
+  <g fill="#000">
+    <!-- letter, held up in the rider's raised hand -->
+    <rect x="62" y="6" width="22" height="15" rx="1.5"/>
+    <path d="M62 8 L73 16 L84 8 V6 H62Z" fill="#fff"/>
+    <path d="M62.5 7.5 L73 15 L83.5 7.5" stroke="#000" stroke-width="2.2" fill="none"/>
+    <!-- raised arm -->
+    <path d="M55 32 L66 21" stroke="#000" stroke-width="5" stroke-linecap="round"/>
+    <!-- rider: head, hat brim, torso -->
+    <circle cx="47" cy="24" r="6.5"/>
+    <rect x="38" y="19" width="19" height="3.2" rx="1.6"/>
+    <path d="M43 30 Q52 28 55 33 L54 44 Q47 50 40 44 Z"/>
+    <!-- rider's leg -->
+    <path d="M48 44 L52 58" stroke="#000" stroke-width="5" stroke-linecap="round"/>
+    <!-- horse: neck + head -->
+    <path d="M58 40 Q70 30 80 32 Q88 33 89 40 L84 44 L78 40 Q70 44 63 50 Z"/>
+    <!-- ear -->
+    <path d="M77 31 L80 24 L83 32 Z"/>
+    <!-- body -->
+    <path d="M22 50 Q36 40 62 46 Q70 50 66 62 Q58 68 44 66 Q28 66 20 60 Z"/>
+    <!-- tail -->
+    <path d="M22 52 Q10 48 6 56 Q12 54 18 58 Q10 60 8 68 Q16 62 22 62 Z"/>
+    <!-- legs, galloping (front stretched forward, rear stretched back) -->
+    <path d="M60 60 L74 70 L84 66" stroke="#000" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M54 62 L64 78" stroke="#000" stroke-width="5" stroke-linecap="round" fill="none"/>
+    <path d="M30 62 L16 74 L8 72" stroke="#000" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M36 64 L28 82" stroke="#000" stroke-width="5" stroke-linecap="round" fill="none"/>
+    <!-- ground dust line -->
+    <path d="M6 88 H90" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-dasharray="10 7"/>
+  </g>
+</svg>

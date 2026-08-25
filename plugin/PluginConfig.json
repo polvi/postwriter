@@ -1,12 +1,12 @@
 {
-  "name": "notedrop",
+  "name": "Post Writer",
   "pluginKey": "notedrop",
   "pluginID": "notedrop00000001",
-  "iconPath": "/icon.png",
+  "iconPath": "assets/icon.png",
   "desc": "Send this note to someone on the tailnet, and pull notes sent to you.",
   "author": "polvi",
-  "versionCode": "2",
-  "versionName": "0.2.0",
+  "versionCode": "3",
+  "versionName": "0.3.0",
   "jsMainPath": "index",
   "uses-permissions": [
     "plugin.permission.FILE:READ",

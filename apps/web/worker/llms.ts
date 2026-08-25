@@ -1,7 +1,7 @@
-export const llmsTxt = `# notedrop
+export const llmsTxt = `# Post Writer (notedrop)
 
-Send a handwritten Supernote note to another person on the tailnet. An inbox
-for ink: the sender's Supernote plugin serialises the open note (strokes and
+Send a handwritten Supernote note to another person on the tailnet. The pony
+express for ink: the sender's Supernote plugin serialises the open note (strokes and
 text boxes, page by page), the recipient checks their inbox and pulls it, and
 the note is rebuilt in their device's INBOX folder.
 

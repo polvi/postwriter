@@ -20,7 +20,7 @@ export async function registerSideButton(): Promise<void> {
   try {
     await PluginManager.registerButton(1, ['NOTE'], {
       id: SIDE_BUTTON_ID,
-      name: 'notedrop',
+      name: 'Post Writer',
       icon: Image.resolveAssetSource(require('../assets/icon.png')).uri,
       showType: 1,
     });

@@ -35,8 +35,18 @@ bunx react-native bundle \
   --reset-cache
 
 step "staging config"
-cp PluginConfig.json "$GEN/PluginConfig.json"
-cp assets/icon.png "$GEN/icon.png"
+# Same convention as the official template: the icon named by iconPath
+# (project-relative) is copied to the package root and the generated
+# manifest points at it as "/<basename>".
+ICON="$(python3 -c "import json;print(json.load(open('PluginConfig.json')).get('iconPath',''))")"
+[ -f "$ICON" ] || { echo "iconPath $ICON not found" >&2; exit 1; }
+cp "$ICON" "$GEN/$(basename "$ICON")"
+python3 - "$GEN/PluginConfig.json" "/$(basename "$ICON")" <<'EOF'
+import json, sys
+cfg = json.load(open('PluginConfig.json'))
+cfg['iconPath'] = sys.argv[2]
+json.dump(cfg, open(sys.argv[1], 'w'), indent=2)
+EOF
 
 step "packaging $NAME.snplg"
 (cd "$GEN" && zip -qr "$OUT/$NAME.zip" .)

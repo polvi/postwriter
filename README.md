@@ -1,8 +1,10 @@
-# notedrop
+# Post Writer
 
-An inbox for ink. Write a note on your Supernote, send it to someone else on
-the tailnet, and they pull it onto their own device. No accounts: the sender
-is whoever the tailnet says is holding the device.
+The pony express for ink (a post rider, on a tailnet pony). Write a note on
+your Supernote, send it to someone else on the tailnet, and they pull it onto
+their own device. No accounts: the sender is whoever the tailnet says is
+holding the device. The code name is `notedrop` (directory, worker, hostname,
+`pluginKey`); "Post Writer" is what people see.
 
 ```
 Supernote (plugin) ──HTTPS over tailnet──▶ notedrop.tailb55c1.ts.net (mf worker, Hono + D1)
@@ -65,8 +67,12 @@ Tailscale must be running on the Supernote; the plugin talks to the ts.net
 hostname directly (PluginHost blocks cleartext HTTP, and the plugin runtime
 has no working timers, so refreshes are manual).
 
-On the device: open a note → sidebar puzzle icon → **notedrop**. The Send
+On the device: open a note → sidebar puzzle icon → **Post Writer**. The Send
 tab lists recipients; the Inbox tab lists what is waiting, with Pull / Pull all.
+
+The icon is `assets/icon.svg` (rider at full gallop, letter held high),
+rasterised by `bun scripts/make-icon.ts` to a transparent 96px PNG; an
+opaque-background PNG does not render in the host's menus.
 
 ### Firmware notes
 
@@ -92,8 +98,6 @@ Tested on a Manta (A5X2; `ro.product.model` misreports it as a Nomad).
   `<sender>-<title>-<yyyymmdd-hhmmss>.note`.
 - `pluginID` (`notedrop00000001`) must never change: reinstalling the same
   id is an in-place upgrade.
-- The plugin's icon does not currently render in the in-note Plugins menu
-  (the Sticker plugin's does); the entry still works.
 - The **Diag** button in the header runs `src/probe.ts`: permissions, page
   index base, and which SDK methods exist, to logcat and the status line.
 

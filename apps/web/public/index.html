@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>notedrop</title>
+<title>Post Writer</title>
 <style>
   :root { color-scheme: light dark; --fg: #111; --bg: #fff; --muted: #666; --line: #ddd; }
   @media (prefers-color-scheme: dark) { :root { --fg: #eee; --bg: #111; --muted: #999; --line: #333; } }
@@ -24,8 +24,8 @@
 </head>
 <body>
 <main>
-  <h1>notedrop</h1>
-  <p class="sub">An inbox for ink. Send a Supernote note to someone on the tailnet.</p>
+  <h1>Post Writer</h1>
+  <p class="sub">The pony express for ink. Send a Supernote note to someone on the tailnet.</p>
   <p id="me">Checking who you are…</p>
   <h2>Inbox</h2>
   <ul id="inbox"></ul>
@@ -57,7 +57,7 @@ function render(el, rows, line, empty) {
     const [inbox, sent, users] = await Promise.all([api('/inbox'), api('/sent'), api('/users')]);
     render($('inbox'), inbox, (m) => `<li><span class="t">${esc(m.title)}</span><span class="m">from ${esc(m.from)} · ${m.pages} page${m.pages === 1 ? '' : 's'} · ${when(m.created_at)}</span></li>`, 'Nothing waiting.');
     render($('sent'), sent, (m) => `<li><span class="t">${esc(m.title)}</span><span class="m">to ${esc(m.to)} · ${when(m.created_at)} · ${m.delivered_at ? 'pulled ' + when(m.delivered_at) : 'not pulled yet'}</span></li>`, 'Nothing sent yet.');
-    render($('users'), users, (u) => `<li><span class="t">${esc(u.name)}</span><span class="m">${esc(u.login)} · seen ${when(u.last_seen)}</span></li>`, 'No one else has opened the plugin yet.');
+    render($('users'), users, (u) => `<li><span class="t">${esc(u.name)}</span><span class="m">${esc(u.login)} · seen ${when(u.last_seen)}</span></li>`, 'No one else has opened Post Writer yet.');
   } catch (e) {
     $('me').textContent = 'Not signed in: ' + e.message;
   }

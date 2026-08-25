@@ -50,7 +50,7 @@ export default function App(): React.ReactElement {
         <Pressable style={s.back} onPress={() => device.close()}>
           <Text style={s.backText}>‹ note</Text>
         </Pressable>
-        <Text style={s.title}>notedrop</Text>
+        <Text style={s.title}>Post Writer</Text>
         <Text style={s.me}>{me ? me.login : '…'}</Text>
         <Pressable
           style={s.diag}
@@ -163,7 +163,7 @@ function SendScreen({ me, busy, setBusy, setStatus }: ScreenProps & { me: UserIn
       {error ? <Text style={s.error}>{error}</Text> : null}
       {users === null && !error ? <Text style={s.muted}>Loading people…</Text> : null}
       {users !== null && users.length === 0 ? (
-        <Text style={s.muted}>No one else yet. They need to open notedrop once on their Supernote.</Text>
+        <Text style={s.muted}>No one else yet. They need to open Post Writer once on their Supernote.</Text>
       ) : null}
       {recipients.map((u) => (
         <Pressable key={u.login} style={s.row} onPress={() => void send(u)} disabled={busy || !notePath}>
