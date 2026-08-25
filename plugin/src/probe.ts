@@ -6,6 +6,7 @@
  */
 
 import { PluginFileAPI, PluginManager } from 'sn-plugin-lib';
+import { SIDE_BUTTON_ID, ensureSideButton, sideButtonStatus } from './buttons';
 import { PERMISSIONS, device } from './device';
 
 async function attempt(label: string, fn: () => Promise<unknown>, expectError = false): Promise<string> {
@@ -61,6 +62,11 @@ export async function runProbe(notePath: string | null): Promise<string[]> {
   } else {
     lines.push('no note open: page probes skipped');
   }
+  // The sidebar entry is the only way into the plugin, so its registration
+  // is the first thing to check when someone installs it and sees nothing.
+  lines.push(`side button: ${sideButtonStatus()}`);
+  lines.push(await attempt('side button (re)register', () => ensureSideButton()));
+  lines.push(await attempt(`buttonState(${SIDE_BUTTON_ID})`, () => PluginManager.getButtonState(SIDE_BUTTON_ID)));
   lines.push(await attempt('openFile available', async () => typeof PluginFileAPI.openFile === 'function'));
   lines.push(await attempt('lifecycle API available', async () => typeof PluginManager.registerPluginLifeListener === 'function'));
   for (const l of lines) console.log(`[postwriter] probe ${l}`);

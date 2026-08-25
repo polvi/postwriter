@@ -59,6 +59,12 @@ curl https://postwriter.tailb55c1.ts.net/api/me
 ```
 
 `deploy.sh` refuses to run unless `CLOUDFLARE_API_BASE_URL` points at mf.
+`/postwriter.snplg` is served by the worker rather than straight off the
+asset server (hence its entry in `run_worker_first`): the package is a zip,
+and Safari renames a download whose media type disagrees with its extension,
+so `application/zip` arrives as `postwriter.snplg.zip` and "Open safe files
+after downloading" may unpack it. The route serves it as
+`application/octet-stream` with the filename in `content-disposition`.
 Note bodies are stored in D1 (`note_bodies`), not R2: wrangler's R2 bucket
 check has no route on mf and aborts the deploy. mf keys state by the D1 id
 in `wrangler.jsonc`, which is why the worker rename kept every user and note.
@@ -83,6 +89,17 @@ has no working timers, so refreshes happen on open and on the Refresh buttons).
 
 On the device: open a note → sidebar puzzle icon → **Post Writer**. The Send
 tab lists recipients; the Inbox tab lists what is waiting, with Pull / Pull all.
+
+That puzzle-menu row is not something the manifest declares: it is a side
+button the plugin registers for itself (`src/buttons.ts`, `registerButton(1,
+['NOTE'], ...)`) the first time the bundle runs. A plugin that fails to
+register one installs cleanly and then has no way in at all, so registration
+is retried with each icon form the host might take — `<pluginDir>/icon.png`,
+`/icon.png` as the manifest spells it, the bundler's asset uri, then no icon
+— a `false` result counts as a refusal, and the last attempt's outcome is in
+the **Diag** output. The button is registered `enable: true`: the SDK's bean
+defaults that to false. `registerConfigButton` adds a second entry, on the
+plugin's row in Settings, that shows the view.
 
 The icon is `assets/icon.svg` (rider at full gallop, letter held high),
 rasterised by `bun scripts/make-icon.ts` to a transparent 96px PNG; an
@@ -113,7 +130,9 @@ Tested on a Manta (A5X2; `ro.product.model` misreports it as a Nomad).
 - `pluginID` (`notedrop00000001`) must never change: reinstalling the same
   id is an in-place upgrade.
 - The **Diag** button in the header runs `src/probe.ts`: permissions, page
-  index base, and which SDK methods exist, to logcat and the status line.
+  index base, side-button registration (which icon form the host took, and
+  the host's state for the button) and which SDK methods exist, to logcat and
+  the status line.
 
 ## Not yet
 

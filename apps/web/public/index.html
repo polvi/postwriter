@@ -59,6 +59,13 @@
   </ol>
   <p class="muted">Reinstalling a newer <code>.snplg</code> the same way is an in-place upgrade.</p>
 
+  <h2>If something goes wrong</h2>
+  <ul>
+    <li><strong>The download is called <code>postwriter.snplg.zip</code></strong> (older Safari downloads did this): the file is fine, rename it back to <code>postwriter.snplg</code>. If Safari unpacked it into a folder, download it again &mdash; the installer wants the package, not its contents.</li>
+    <li><strong>It installed but there is no Post Writer row in the puzzle menu</strong>: the plugin registers that row itself the first time it runs, so install the current <code>.snplg</code> again (an in-place upgrade) and reopen a note. If it still is not there, restart the device, then <a href="https://github.com/polvi/postwriter/issues">open an issue</a> with your firmware and PluginHost versions.</li>
+    <li><strong>The plugin opens but says it does not know you</strong>: Tailscale is not connected on the Supernote. Connect it and tap <em>Refresh</em>.</li>
+  </ul>
+
   <h2>Use it</h2>
   <ul>
     <li><strong>Send</strong>: with a note open, open Post Writer and tap a person under <em>Send to</em>. The whole note goes: every page, every stroke, pen and pressure included.</li>

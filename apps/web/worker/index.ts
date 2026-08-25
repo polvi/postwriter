@@ -87,6 +87,26 @@ app.route('/api', api);
 // The status page (inbox / sent / people) lives at /inbox; the landing page is /.
 app.get('/inbox', (c) => c.env.ASSETS.fetch(new Request(new URL('/inbox.html', c.req.url), c.req.raw)));
 
+// The plugin package is a zip with a .snplg name, and Safari renames a
+// download whose media type disagrees with its extension: served as
+// application/zip it lands as postwriter.snplg.zip (and "Open safe files
+// after downloading" unpacks it), which the Supernote installer will not
+// take. Serve it as an opaque attachment with the filename spelled out.
+// Reaching this route at all needs /postwriter.snplg in the asset config's
+// run_worker_first list; the ASSETS binding itself bypasses that.
+app.get('/postwriter.snplg', async (c) => {
+  const asset = await c.env.ASSETS.fetch(c.req.raw);
+  if (!asset.ok) return asset;
+  const headers = new Headers(asset.headers);
+  headers.set('content-type', 'application/octet-stream');
+  headers.set('content-disposition', 'attachment; filename="postwriter.snplg"');
+  headers.set('x-content-type-options', 'nosniff');
+  // Installs are in-place upgrades keyed by pluginID: a stale cached copy is
+  // an upgrade that silently does nothing.
+  headers.set('cache-control', 'no-cache');
+  return new Response(asset.body, { status: asset.status, statusText: asset.statusText, headers });
+});
+
 app.notFound((c) => (c.req.path.startsWith('/api/') ? c.json({ error: 'not found' }, 404) : c.env.ASSETS.fetch(c.req.raw)));
 
 function publicMessage(m: db.MessageRow) {
