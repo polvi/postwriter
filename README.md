@@ -68,12 +68,25 @@ has no working timers, so refreshes are manual).
 On the device: open a note → sidebar puzzle icon → **notedrop**. The Send
 tab lists recipients; the Inbox tab lists what is waiting, with Pull / Pull all.
 
-### Firmware notes (Nomad, Chauvet 3.x, PluginHost 1.00.26005190)
+### Firmware notes
 
-- `PluginManager.hasPermission` / `requestPermission` and
-  `PluginFileAPI.openFile` have no native implementation on this host. The
+Tested on a Manta (A5X2; `ro.product.model` misreports it as a Nomad).
+
+- **Plugin-preview firmware** (Chauvet beta 2608241001, PluginHost
+  1.00.2608211): permissions are enforced at the process boundary. The plugin
+  requests `INTERNET`, `FILE:READ`, `FILE:WRITE` when the view opens; pick
+  **Always Allow** or the grant is revoked when the view closes. The manifest
+  is parsed only at `.snplg` install, so a permission added to
+  `PluginConfig.json` needs `scripts/deploy.sh`, not a hot reload. `openFile`
+  works here, so a pulled note opens on screen. The lifecycle listener
+  refreshes the note path and inbox each time the view is shown.
+- **Earlier firmware** (PluginHost 1.00.26005190): `hasPermission`,
+  `requestPermission` and `openFile` have no native implementation. The
   plugin treats a missing permission API as "no permission system" and
   `openFile` as best-effort ("Open it from Files › INBOX").
+- Page indices for `getElements` / `getPageSize` / `insertElements` are
+  0-based on both (the 1-indexing change in the preview release covers
+  `numInPage` and the `*PageElements` family, which notedrop does not use).
 - `createNote` needs an absolute `/storage/emulated/0/...` path and there is
   no mkdir, so pulled notes are flat files in `INBOX/`:
   `<sender>-<title>-<yyyymmdd-hhmmss>.note`.
@@ -81,6 +94,8 @@ tab lists recipients; the Inbox tab lists what is waiting, with Pull / Pull all.
   id is an in-place upgrade.
 - The plugin's icon does not currently render in the in-note Plugins menu
   (the Sticker plugin's does); the entry still works.
+- The **Diag** button in the header runs `src/probe.ts`: permissions, page
+  index base, and which SDK methods exist, to logcat and the status line.
 
 ## Not yet
 

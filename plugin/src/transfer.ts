@@ -36,8 +36,11 @@ export async function readNote(notePath: string, progress: Progress): Promise<No
         if (out) elements.push(out);
       } finally {
         // Elements from getElements hold native memory until recycled.
+        // Some hosts hand back plain objects with no recycle(); then the
+        // comm API's recycleElement(uuid) is the fallback.
         try {
-          await el.recycle();
+          if (typeof el.recycle === 'function') await el.recycle();
+          else if (el.uuid) device.recycle(el.uuid);
         } catch {
           /* best effort */
         }

@@ -15,7 +15,20 @@ DEVICE="${SNPLG_DEVICE:-100.86.171.55:5555}"
 OUT="${OUT:-build/screen.png}"
 d() { adb -s "$DEVICE" "$@"; }
 case "${1:-}" in
-  open) d shell input tap 56 1216; sleep 2; d shell input tap 394 1494; sleep 4 ;;
+  open)
+    d shell input tap 56 1907; sleep 2
+    d shell uiautomator dump /sdcard/_ui.xml >/dev/null 2>&1
+    pt=$(d shell cat /sdcard/_ui.xml | python3 -c '
+import re,sys
+xml=sys.stdin.read()
+for n in re.findall(r"<node [^>]*?/?>", xml):
+    if re.search(r"text=\"notedrop\"", n):
+        b=re.search(r"bounds=\"\[(\d+),(\d+)\]\[(\d+),(\d+)\]\"", n)
+        if b:
+            x1,y1,x2,y2=map(int,b.groups()); print((x1+x2)//2,(y1+y2)//2); break
+')
+    [ -n "$pt" ] || { echo "notedrop menu entry not found" >&2; exit 1; }
+    d shell input tap $pt; sleep 4 ;;
   send) d shell input tap 1780 672; sleep "${2:-6}" ;;
   inbox) d shell input tap 1440 180; sleep 3 ;;
   pull) d shell input tap 1780 440; sleep "${2:-8}" ;;

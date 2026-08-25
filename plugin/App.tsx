@@ -8,7 +8,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { ApiError, api, newId } from './src/api';
 import { PERMISSIONS, device, ensurePermissions } from './src/device';
+import { onShown } from './src/lifecycle';
 import type { InboxMessage, UserInfo } from './src/noteFormat';
+import { runProbe } from './src/probe';
 import { inboxPathFor, readNote, titleFor, writeNote } from './src/transfer';
 
 type Tab = 'send' | 'inbox';
@@ -19,11 +21,27 @@ export default function App(): React.ReactElement {
   const [status, setStatus] = useState('');
   const [busy, setBusy] = useState(false);
 
+  // Permissions first: on hosts with the permission gate, every SDK file
+  // call and every fetch fails until granted. Ask for what both screens need
+  // as soon as the view opens, so the dialogs appear once, up front.
+  const [ready, setReady] = useState(false);
   useEffect(() => {
-    api
-      .me()
-      .then(setMe)
-      .catch((e: Error) => setStatus(describe(e)));
+    (async () => {
+      setStatus('Checking permissions… choose "Always allow" so this only happens once.');
+      const denied = await ensurePermissions([PERMISSIONS.internet, PERMISSIONS.read, PERMISSIONS.write]).catch(
+        (e: Error) => `error: ${e.message}`,
+      );
+      if (denied) {
+        setStatus(`Permission refused: ${denied}. Enable it under Settings › Apps › Plugins › notedrop.`);
+        return;
+      }
+      setStatus('');
+      setReady(true);
+      api
+        .me()
+        .then(setMe)
+        .catch((e: Error) => setStatus(describe(e)));
+    })();
   }, []);
 
   return (
@@ -34,12 +52,30 @@ export default function App(): React.ReactElement {
         </Pressable>
         <Text style={s.title}>notedrop</Text>
         <Text style={s.me}>{me ? me.login : '…'}</Text>
+        <Pressable
+          style={s.diag}
+          disabled={busy}
+          onPress={() => {
+            setBusy(true);
+            setStatus('probing…');
+            device
+              .currentFilePath()
+              .catch(() => null)
+              .then((p) => runProbe(p))
+              .then((lines) => setStatus(lines.join('\n')))
+              .catch((e: Error) => setStatus(describe(e)))
+              .finally(() => setBusy(false));
+          }}>
+          <Text style={s.smallText}>Diag</Text>
+        </Pressable>
       </View>
       <View style={s.tabs}>
         <TabButton label="Send" active={tab === 'send'} onPress={() => setTab('send')} />
         <TabButton label="Inbox" active={tab === 'inbox'} onPress={() => setTab('inbox')} />
       </View>
-      {tab === 'send' ? (
+      {!ready ? (
+        <View style={s.body} />
+      ) : tab === 'send' ? (
         <SendScreen me={me} busy={busy} setBusy={setBusy} setStatus={setStatus} />
       ) : (
         <InboxScreen busy={busy} setBusy={setBusy} setStatus={setStatus} />
@@ -83,6 +119,7 @@ function SendScreen({ me, busy, setBusy, setStatus }: ScreenProps & { me: UserIn
   }, []);
 
   useEffect(refresh, [refresh]);
+  useEffect(() => onShown(refresh), [refresh]);
 
   const send = async (to: UserInfo): Promise<void> => {
     if (!notePath) {
@@ -154,6 +191,7 @@ function InboxScreen({ busy, setBusy, setStatus }: ScreenProps): React.ReactElem
   }, []);
 
   useEffect(refresh, [refresh]);
+  useEffect(() => onShown(refresh), [refresh]);
 
   const pull = async (m: InboxMessage): Promise<string> => {
     setStatus(`fetching "${m.title}" from ${m.from}…`);
@@ -254,6 +292,7 @@ const s = StyleSheet.create({
   backText: { color: '#000', fontSize: 20 },
   title: { color: '#000', fontSize: 28, fontWeight: '700', flex: 1 },
   me: { color: '#444', fontSize: 15 },
+  diag: { borderWidth: 1, borderColor: '#000', paddingHorizontal: 10, paddingVertical: 4, marginLeft: 16 },
   tabs: { flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: '#000' },
   tab: { flex: 1, paddingVertical: 14, alignItems: 'center' },
   tabActive: { backgroundColor: '#000' },
