@@ -6,8 +6,8 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 DEVICE="${SNPLG_DEVICE:-100.86.171.55:5555}"
 PLUGIN_ID="notedrop00000001"
-BUNDLE="build/generated/notedrop.bundle"
-DEST="/storage/emulated/0/MyStyle/notedrop.bundle"
+BUNDLE="build/generated/postwriter.bundle"
+DEST="/storage/emulated/0/MyStyle/postwriter.bundle"
 
 [ "${1:-}" = "--build" ] && bash buildPlugin.sh >/dev/null
 [ -f "$BUNDLE" ] || { echo "missing $BUNDLE; run buildPlugin.sh" >&2; exit 1; }

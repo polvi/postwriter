@@ -1,13 +1,14 @@
 # Post Writer
 
-The pony express for ink (a post rider, on a tailnet pony). Write a note on
-your Supernote, send it to someone else on the tailnet, and they pull it onto
-their own device. No accounts: the sender is whoever the tailnet says is
-holding the device. The code name is `notedrop` (directory, worker, hostname,
-`pluginKey`); "Post Writer" is what people see.
+The pony express for ink. Write a note on your Supernote, send it to someone
+else on the tailnet, and they pull it onto their own device. No accounts: the
+sender is whoever the tailnet says is holding the device.
+
+Landing page, plugin download and inbox view: **https://postwriter.tailb55c1.ts.net**
+(tailnet only).
 
 ```
-Supernote (plugin) ──HTTPS over tailnet──▶ notedrop.tailb55c1.ts.net (mf worker, Hono + D1)
+Supernote (plugin) ──HTTPS over tailnet──▶ postwriter.tailb55c1.ts.net (mf worker, Hono + D1)
    Send: open note → elements → JSON        POST /api/send   {id, to, note}
    Inbox: list → Pull → rebuild .note        GET  /api/inbox  · GET /api/inbox/:id
           in /storage/emulated/0/INBOX/      POST /api/inbox/:id/delivered (after the write)
@@ -30,29 +31,41 @@ Supernote (plugin) ──HTTPS over tailnet──▶ notedrop.tailb55c1.ts.net (
 - **Sending to yourself** is allowed: it is how a one-device setup is tested,
   and it doubles as "copy this note into INBOX".
 
+Code names: the D1 database, the plugin's `pluginKey`/`pluginID`
+(`notedrop` / `notedrop00000001`) and the RN app name are still `notedrop`
+from the project's first life inside yolorepo. They are identifiers the host
+and the platform key state by, so they stay.
+
+## Layout
+
+```
+apps/web/     Hono worker: API, landing page (public/index.html), inbox view (/inbox), /llms.txt
+plugin/       React Native + sn-plugin-lib Supernote plugin → build/outputs/postwriter.snplg
+specs/        TLA+ model of the delivery protocol
+```
+
 ## Service (`apps/web`)
 
-Tailnet-only, deployed to mf. There is no Cloudflare deployment because the
-identity model needs the tailnet.
+Tailnet-only, deployed to mf (the self-hosted Workers platform on proc-dev).
+There is no Cloudflare deployment because the identity model needs the
+tailnet. `wrangler.jsonc` is committed as-is; everything real is in
+`env.procdev`.
 
 ```sh
 bun install
 bun run test            # note-format validation
-bun run deploy          # bun run configure + wrangler deploy --env procdev + migrations
-curl https://notedrop.tailb55c1.ts.net/api/me
+bun run deploy          # builds the plugin, copies the .snplg into public/, wrangler deploy --env procdev, migrations
+curl https://postwriter.tailb55c1.ts.net/api/me
 ```
 
 `deploy.sh` refuses to run unless `CLOUDFLARE_API_BASE_URL` points at mf.
 Note bodies are stored in D1 (`note_bodies`), not R2: wrangler's R2 bucket
-check has no route on mf and aborts the deploy. The D1 id is pinned in
-`stack.config.jsonc` (`d1.notedrop`); mf keys state by that id.
-
-A small status page lives at `/` (inbox, sent, people) and the API is
-described at `/llms.txt`.
+check has no route on mf and aborts the deploy. mf keys state by the D1 id
+in `wrangler.jsonc`, which is why the worker rename kept every user and note.
 
 ## Plugin (`plugin`)
 
-React Native 0.79.2 + `sn-plugin-lib`, packaged as `build/outputs/notedrop.snplg`.
+React Native 0.79.2 + `sn-plugin-lib`, packaged as `build/outputs/postwriter.snplg`.
 
 ```sh
 cd plugin && bun install
@@ -60,12 +73,13 @@ bash buildPlugin.sh              # bundle + PluginConfig.json + icon → .snplg
 bash scripts/deploy.sh           # adb push + UI-automated install (first time / upgrades)
 bash scripts/hotreload.sh --build  # swap the JS bundle in place (iteration)
 bash scripts/logs.sh             # logcat, the only debugging channel
+bash scripts/drive.sh open|send|inbox|pull|shot   # tap through the UI over adb
 ```
 
-Device: `SNPLG_DEVICE=host:5555` (defaults to the Nomad on the tailnet).
+Device: `SNPLG_DEVICE=host:5555` (defaults to the Manta on the tailnet).
 Tailscale must be running on the Supernote; the plugin talks to the ts.net
 hostname directly (PluginHost blocks cleartext HTTP, and the plugin runtime
-has no working timers, so refreshes are manual).
+has no working timers, so refreshes happen on open and on the Refresh buttons).
 
 On the device: open a note → sidebar puzzle icon → **Post Writer**. The Send
 tab lists recipients; the Inbox tab lists what is waiting, with Pull / Pull all.
@@ -92,7 +106,7 @@ Tested on a Manta (A5X2; `ro.product.model` misreports it as a Nomad).
   `openFile` as best-effort ("Open it from Files › INBOX").
 - Page indices for `getElements` / `getPageSize` / `insertElements` are
   0-based on both (the 1-indexing change in the preview release covers
-  `numInPage` and the `*PageElements` family, which notedrop does not use).
+  `numInPage` and the `*PageElements` family, which Post Writer does not use).
 - `createNote` needs an absolute `/storage/emulated/0/...` path and there is
   no mkdir, so pulled notes are flat files in `INBOX/`:
   `<sender>-<title>-<yyyymmdd-hhmmss>.note`.

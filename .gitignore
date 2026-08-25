@@ -1,0 +1,5 @@
+node_modules/
+.wrangler/
+apps/web/public/postwriter.snplg
+plugin/build/
+plugin/src/buildStamp.ts

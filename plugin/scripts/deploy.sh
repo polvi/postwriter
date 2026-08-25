@@ -22,7 +22,7 @@ command adb devices | awk -v d="$DEVICE" '$1==d && $2=="device"' | grep -q . || 
 adb get-state >/dev/null
 
 [ "$NO_BUILD" = 1 ] || bash buildPlugin.sh >/dev/null
-SNPLG=build/outputs/notedrop.snplg
+SNPLG=build/outputs/postwriter.snplg
 [ -f "$SNPLG" ] || { echo "no $SNPLG" >&2; exit 1; }
 NAME="$(basename "$SNPLG")"
 

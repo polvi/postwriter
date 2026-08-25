@@ -1,4 +1,4 @@
-export const llmsTxt = `# Post Writer (notedrop)
+export const llmsTxt = `# Post Writer
 
 Send a handwritten Supernote note to another person on the tailnet. The pony
 express for ink: the sender's Supernote plugin serialises the open note (strokes and
@@ -30,5 +30,11 @@ no token, no signup: opening the plugin once registers you as a recipient.
 
 Max 20 MB per note.
 
-Source: yolorepo/notedrop. Plugin: notedrop/plugin (Supernote sn-plugin-lib).
+## Pages
+
+- /                  landing page: what it is, how to install and use the plugin
+- /postwriter.snplg  the current plugin package (copy to the Supernote's MyStyle folder)
+- /inbox             your inbox, sent notes and people (browser view)
+
+Source: https://github.com/polvi/postwriter (apps/web is this worker, plugin/ is the Supernote plugin).
 `;

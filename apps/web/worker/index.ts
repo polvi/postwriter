@@ -84,6 +84,9 @@ api.post('/inbox/:id/delivered', async (c) => {
 
 app.route('/api', api);
 
+// The status page (inbox / sent / people) lives at /inbox; the landing page is /.
+app.get('/inbox', (c) => c.env.ASSETS.fetch(new Request(new URL('/inbox.html', c.req.url), c.req.raw)));
+
 app.notFound((c) => (c.req.path.startsWith('/api/') ? c.json({ error: 'not found' }, 404) : c.env.ASSETS.fetch(c.req.raw)));
 
 function publicMessage(m: db.MessageRow) {

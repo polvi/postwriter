@@ -8,7 +8,7 @@ cd "$(dirname "$0")"
 
 step() { printf '\n==> %s\n' "$*"; }
 
-NAME=notedrop
+NAME=postwriter
 GEN="$PWD/build/generated"
 OUT="$PWD/build/outputs"
 rm -rf "$GEN" "$OUT"

@@ -1,11 +1,11 @@
 import type { InboxMessage, NoteDoc, UserInfo } from './noteFormat';
 
 /**
- * notedrop runs on mf, tailnet-only. The device is on the tailnet, so the
+ * Post Writer runs on mf, tailnet-only. The device is on the tailnet, so the
  * platform identifies this user from the connection: no token, no login.
  * PluginHost blocks cleartext HTTP; the ts.net hostname carries a real cert.
  */
-export const BASE_URL = 'https://notedrop.tailb55c1.ts.net';
+export const BASE_URL = 'https://postwriter.tailb55c1.ts.net';
 
 export class ApiError extends Error {
   constructor(

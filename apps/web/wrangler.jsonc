@@ -1,0 +1,46 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Post Writer runs only on the mf platform (tailnet-only): identity is the
+  // tailnet user, so there is no public deployment. Deploy with
+  // `bun run deploy` (sets CLOUDFLARE_API_BASE_URL to mf and uses --env procdev).
+  "name": "postwriter",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-07-01",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*", "/llms.txt", "/inbox"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "notedrop",
+      "database_id": "b3b02c9c-36a4-45c4-a537-3e0c1c9d7acf",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "observability": { "enabled": true },
+  "env": {
+    "procdev": {
+      "name": "postwriter",
+      "workers_dev": true,
+      "routes": [],
+      "assets": {
+        "directory": "./public",
+        "binding": "ASSETS",
+        "run_worker_first": ["/api/*", "/llms.txt", "/inbox"]
+      },
+      "d1_databases": [
+        {
+          // Same database as when the worker was called notedrop: mf keys
+          // state by this id, so the rename kept every user and message.
+          "binding": "DB",
+          "database_name": "notedrop",
+          "database_id": "b3b02c9c-36a4-45c4-a537-3e0c1c9d7acf",
+          "migrations_dir": "migrations"
+        }
+      ],
+      "services": [{ "binding": "TAILNET", "service": "mf-tailnet" }]
+    }
+  }
+}

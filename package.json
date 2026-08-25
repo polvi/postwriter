@@ -1,5 +1,5 @@
 {
-  "name": "notedrop",
+  "name": "postwriter",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "workspaces": [
@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "bun run --cwd apps/web dev",
     "test": "bun run --cwd apps/web test",
-    "typecheck": "bun run --cwd apps/web typecheck",
+    "typecheck": "bun run --cwd apps/web typecheck && bun run --cwd plugin typecheck",
     "deploy": "bun run --cwd apps/web deploy",
     "migrate": "bun run --cwd apps/web migrate",
     "plugin:build": "bash plugin/buildPlugin.sh",

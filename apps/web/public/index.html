@@ -4,64 +4,81 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Post Writer</title>
+<meta name="description" content="The pony express for ink. Send a handwritten Supernote note to someone on your tailnet.">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
 <style>
-  :root { color-scheme: light dark; --fg: #111; --bg: #fff; --muted: #666; --line: #ddd; }
-  @media (prefers-color-scheme: dark) { :root { --fg: #eee; --bg: #111; --muted: #999; --line: #333; } }
-  body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: var(--fg); background: var(--bg); }
-  main { max-width: 720px; margin: 0 auto; padding: 24px 16px; }
-  h1 { font-size: 28px; margin: 0 0 4px; }
-  .sub { color: var(--muted); margin: 0 0 24px; }
-  h2 { font-size: 18px; margin: 28px 0 8px; }
-  ul { list-style: none; padding: 0; margin: 0; }
-  li { padding: 12px 0; border-top: 1px solid var(--line); display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; }
-  li:last-child { border-bottom: 1px solid var(--line); }
-  .t { font-weight: 600; flex: 1 1 200px; }
-  .m { color: var(--muted); font-size: 14px; }
-  .empty { color: var(--muted); }
-  code { background: rgba(127,127,127,.15); padding: 1px 5px; border-radius: 4px; }
-  footer { margin-top: 40px; color: var(--muted); font-size: 13px; }
+  :root { color-scheme: light dark; --fg: #111; --bg: #fff; --muted: #666; --line: #ddd; --accent: #111; }
+  @media (prefers-color-scheme: dark) { :root { --fg: #eee; --bg: #111; --muted: #999; --line: #333; --accent: #eee; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 17px/1.55 system-ui, -apple-system, sans-serif; color: var(--fg); background: var(--bg); }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 20px 64px; }
+  header { display: flex; align-items: center; gap: 20px; margin-bottom: 8px; }
+  header img { width: 96px; height: 96px; }
+  @media (prefers-color-scheme: dark) { header img { filter: invert(1); } }
+  h1 { font-size: 40px; margin: 0; letter-spacing: -0.5px; }
+  .tag { color: var(--muted); font-size: 19px; margin: 0; }
+  .lede { font-size: 20px; margin: 20px 0 8px; }
+  .cta { display: flex; gap: 12px; flex-wrap: wrap; margin: 24px 0 8px; }
+  .cta a { display: inline-block; padding: 12px 18px; border: 1.5px solid var(--accent); border-radius: 8px; color: var(--fg); text-decoration: none; font-weight: 600; }
+  .cta a.primary { background: var(--accent); color: var(--bg); }
+  h2 { font-size: 22px; margin: 40px 0 10px; }
+  ol, ul { padding-left: 22px; }
+  li { margin: 8px 0; }
+  code { background: rgba(127,127,127,.15); padding: 1px 6px; border-radius: 4px; font-size: 0.93em; }
+  pre { background: rgba(127,127,127,.12); padding: 12px 14px; border-radius: 8px; overflow-x: auto; font-size: 14px; }
+  .muted { color: var(--muted); }
+  footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+  footer a { color: inherit; }
 </style>
 </head>
 <body>
 <main>
-  <h1>Post Writer</h1>
-  <p class="sub">The pony express for ink. Send a Supernote note to someone on the tailnet.</p>
-  <p id="me">Checking who you are…</p>
-  <h2>Inbox</h2>
-  <ul id="inbox"></ul>
-  <h2>Sent</h2>
-  <ul id="sent"></ul>
-  <h2>People</h2>
-  <ul id="users"></ul>
+  <header>
+    <img src="/icon.svg" alt="A post rider at full gallop, letter held high">
+    <div>
+      <h1>Post Writer</h1>
+      <p class="tag">The pony express for ink.</p>
+    </div>
+  </header>
+
+  <p class="lede">Write a note on your Supernote. Send it to someone on the tailnet. They pull it onto their own Supernote, strokes and all.</p>
+  <p class="muted">No accounts, no sign-in: the tailnet already knows who is holding the device. Anyone who has opened Post Writer once is a recipient.</p>
+
+  <div class="cta">
+    <a class="primary" href="/postwriter.snplg" download>Download the plugin (.snplg)</a>
+    <a href="/inbox">Your inbox</a>
+    <a href="https://github.com/polvi/postwriter">Source on GitHub</a>
+  </div>
+
+  <h2>Install on your Supernote</h2>
+  <ol>
+    <li>Make sure the Supernote is on the tailnet (Tailscale app installed and connected) and on the plugin-preview firmware.</li>
+    <li>Copy <code>postwriter.snplg</code> into the device's <code>MyStyle</code> folder (USB, Supernote Partner app, or <code>adb push</code>).</li>
+    <li>On the device: <strong>Settings › Apps › Plugins › Add Plugin</strong>, pick <code>postwriter.snplg</code>, tap <strong>Install</strong>.</li>
+    <li>Open any note, tap the puzzle icon in the sidebar, choose <strong>Post Writer</strong>. Grant network and file access; pick <strong>Always Allow</strong> so it only asks once.</li>
+  </ol>
+  <p class="muted">Reinstalling a newer <code>.snplg</code> the same way is an in-place upgrade.</p>
+
+  <h2>Use it</h2>
+  <ul>
+    <li><strong>Send</strong>: with a note open, open Post Writer and tap a person under <em>Send to</em>. The whole note goes: every page, every stroke, pen and pressure included.</li>
+    <li><strong>Inbox</strong>: switch to the <em>Inbox</em> tab and tap <em>Pull</em> (or <em>Pull all</em>). The note is rebuilt in your <code>INBOX</code> folder and opens on screen.</li>
+    <li>Sending to yourself works too. It is a quick way to copy a note into <code>INBOX</code>, and a one-device way to try the whole loop.</li>
+    <li>This page's <a href="/inbox">inbox view</a> shows what is waiting for you and what you have sent, from any browser on the tailnet.</li>
+  </ul>
+
+  <h2>How it works</h2>
+  <p>The Supernote plugin SDK exposes a note as elements (strokes with points and pressure, text boxes), not as a file, so Post Writer serialises those page by page, with geometry normalised so a note lands correctly on a different device size. The service is a small worker on the tailnet that holds the note until the recipient pulls it; delivery is acknowledged only after the note is written on the receiving device, so a dropped connection never loses a note. Templates, links, titles and images do not travel yet.</p>
+
+  <h2>From the command line</h2>
+  <pre>adb push postwriter.snplg /storage/emulated/0/MyStyle/
+curl https://postwriter.tailb55c1.ts.net/api/me      # who the tailnet says you are
+curl https://postwriter.tailb55c1.ts.net/api/inbox   # what is waiting for you</pre>
+  <p class="muted">Full API in <a href="/llms.txt">/llms.txt</a>.</p>
+
   <footer>
-    Pull notes from the Supernote plugin (Inbox → Pull); this page only shows status.
-    API: <a href="/llms.txt">/llms.txt</a>
+    Post Writer runs on your tailnet only. Source: <a href="https://github.com/polvi/postwriter">github.com/polvi/postwriter</a>.
   </footer>
 </main>
-<script>
-const $ = (id) => document.getElementById(id);
-const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-const when = (s) => s ? new Date(s.replace(' ', 'T') + 'Z').toLocaleString() : '';
-async function api(path) {
-  const r = await fetch('/api' + path);
-  if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || r.statusText);
-  return r.json();
-}
-function render(el, rows, line, empty) {
-  el.innerHTML = rows.length ? rows.map(line).join('') : `<li class="empty">${empty}</li>`;
-}
-(async () => {
-  try {
-    const me = await api('/me');
-    $('me').innerHTML = `You are <code>${esc(me.login)}</code>.`;
-    const [inbox, sent, users] = await Promise.all([api('/inbox'), api('/sent'), api('/users')]);
-    render($('inbox'), inbox, (m) => `<li><span class="t">${esc(m.title)}</span><span class="m">from ${esc(m.from)} · ${m.pages} page${m.pages === 1 ? '' : 's'} · ${when(m.created_at)}</span></li>`, 'Nothing waiting.');
-    render($('sent'), sent, (m) => `<li><span class="t">${esc(m.title)}</span><span class="m">to ${esc(m.to)} · ${when(m.created_at)} · ${m.delivered_at ? 'pulled ' + when(m.delivered_at) : 'not pulled yet'}</span></li>`, 'Nothing sent yet.');
-    render($('users'), users, (u) => `<li><span class="t">${esc(u.name)}</span><span class="m">${esc(u.login)} · seen ${when(u.last_seen)}</span></li>`, 'No one else has opened Post Writer yet.');
-  } catch (e) {
-    $('me').textContent = 'Not signed in: ' + e.message;
-  }
-})();
-</script>
 </body>
 </html>
